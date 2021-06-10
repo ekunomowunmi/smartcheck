@@ -1,1 +1,59 @@
 /* You can add global styles to this file, and also import other style files */
+.header {
+  .navbar {
+    .container{
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+  }
+}
+
+.dot {
+  height: 50px;
+  width: 50px;
+  // border-radius: 50%;
+  margin:10px;
+  display: inline-block;
+  opacity: 1;
+  text-align: center;
+}
+
+.dotnum{
+  font-size: x-large;
+  display: flex;
+  justify-content: center;
+  margin-top: 20%;
+  color: #1B1464;
+  border-radius: 50%;
+}
+
+.dotgreen{
+  background-color: #24C977;
+  color: white;
+}
+
+.dotblue{
+  border: 2px solid #1B1464;
+  background-color: white;
+}
+
+.dotred{
+  background-color: #FF4343F7;
+  color: white;
+}
+
+.dotgold{
+  background-color: #E0B237;
+  color: white;
+}
+
+nav.lighten-5.navbar.navbar-expand-lg.navbar-light.padding-link.sticky-top.white{
+  top: 60px;
+}
+
+.navbar.navbar-light.padding-link .breadcrumb .nav-item.active>.nav-link, .navbar.navbar-light .navbar-nav .nav-item.active>.nav-link {
+  background-color: transparent !important;
+  border-bottom: 4px solid #49D3FF;
+}

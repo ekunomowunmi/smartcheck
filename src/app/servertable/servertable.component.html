@@ -1,0 +1,216 @@
+
+    <mdb-card class="mt-5">
+      <div class="view rgba-white-slight waves-light" mdbWavesEffect>
+        <a>
+          <div class="mask"></div>
+        </a>
+      </div>
+      <mdb-card-body>
+        <div class="row">
+          <div class="col-md-3 col-sm-3 col-lg-3">
+            <div class="md-form form-sm">
+              <mdb-icon fas icon="search" class="prefix"></mdb-icon>
+              <input mdbInput type="text" id="search" class="form-control">
+              <label for="search">Enter a search keyword</label>
+            </div>
+          </div>
+
+
+          <div class="col-sm-2 col-md-2 col-lg-2 md-form">
+            <select class="browser-default custom-select">
+              <option selected>Active Status</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+              <option value="all">All</option>
+            </select>
+          </div>
+          <div class="col-sm-7 col-md-7 col-lg-7">
+          <button type="button" mdbBtn color="info" mdbWavesEffect class="float-right" (click)="addServer.show()">Create Server</button>
+          </div>
+
+        </div>
+
+        <div class="table-responsive">
+          <table mdbTable #tableEl="mdbTable" class="z-depth-1 table">
+            <thead class=" w-100">
+
+                <div class="d-flex justify-content-end p-4 mr-0">
+                  <img src="../../assets/svg/PDF.svg"  />
+                  <img src="../../assets/svg/xls.svg"/>
+                  <span class="ml-4">Showing 3 of {{elements.length}} entries</span>
+                </div>
+
+            </thead>
+            <thead>
+            <tr class="grey lighten-2 w-100">
+              <th *ngFor="let head of headElements; let i = index" scope="col">{{head}}
+              </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let el of elements; let i = index">
+              <th *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex"
+                  scope="row">{{i+1}}</th>
+              <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex">
+                <mdb-icon fas icon="circle" [ngClass]="el.status == statusEnum.Healthy ? 'green-text' : 'red-text'"></mdb-icon> {{el.applicationName}}</td>
+              <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex">
+                <a style="color: blue;" class="server-length">{{el.servers.length}} Servers
+                  <div class="show-modal">
+                    <mdb-card style="width: 12rem; position: absolute;" class="mx-auto">
+                      <mdb-card-body>
+                        <div *ngFor="let server of el.servers">
+                         <span class="mr-1"><mdb-icon fas icon="arrow-right" class="grey-text" size="sm"></mdb-icon></span> {{server.serverName}}
+                          <span *ngIf="server.isActive"> <mdb-icon fas icon="circle" class="green-text ml-3"></mdb-icon></span>
+                          <span *ngIf="!server.isActive"> <mdb-icon fas icon="circle" class="red-text ml-3"></mdb-icon></span>
+                        </div>
+                      </mdb-card-body>
+                    </mdb-card>
+                  </div></a>
+
+
+              </td>
+              <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex">{{el.lastScanDate}}</td>
+              <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex">
+
+                <!-- <mdb-icon fas icon="check-circle" class="mr-2" size="lg" [ngClass]="el.status == statusEnum.Healthy ? 'green-text' : el.status == statusEnum.Inactive?'amber-text':'red-text'" ></mdb-icon> -->
+                <mdb-icon fas icon="check-circle" class="mr-2" size="lg" class="green-text mr-2"  *ngIf="el.status == statusEnum.Healthy" ></mdb-icon>
+                <mdb-icon fas icon="exclamation-triangle"  size="lg" class="amber-text mr-2"  *ngIf="el.status == statusEnum.Inactive"></mdb-icon>
+                <mdb-icon fas icon="times"  class="red-text mr-2"  size="lg" *ngIf="el.status == statusEnum.Critical"></mdb-icon>
+                {{statusEnum[el.status]}}</td>
+                <td>          <button type="button" mdbBtn color="info" mdbWavesEffect (click)="showApplicationResult(el)" >View Results</button>
+                </td>
+                <td> <button type="button" mdbBtn color="info" mdbWavesEffect (click)="showApplicationResult(el)" >Edit</button> </td>
+
+            </tr>
+            </tbody>
+            <tfoot class="grey lighten-5 w-100">
+            <tr>
+              <td colspan="6">
+                <mdb-table-pagination [tableEl]="tableEl" [searchDataSource]="elements"></mdb-table-pagination>
+              </td>
+            </tr>
+            </tfoot>
+          </table>
+        </div>
+
+      </mdb-card-body>
+    </mdb-card>
+
+
+
+<div mdbModal #applicationResult="mdbModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="applicationResultModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close pull-right" aria-label="Close" (click)="applicationResult.hide()">
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title w-100" id="myModalLabel">Health Check Result</h4>
+      </div>
+      <div class="modal-body">
+        <mdb-card style="width: 15rem;" class="mx-auto">
+          <mdb-card-body>
+            <p>{{selectedApplication.applicationName}}<mdb-icon fas icon="circle" class="ml-1 green-text"></mdb-icon></p>
+            <p>Endpoint</p>
+            <div *ngFor="let server of selectedApplication.servers">
+             <span class="mr-1"><mdb-icon fas icon="arrow-right" class="grey-text" size="sm"></mdb-icon></span> {{server.serverName}}
+              <span *ngIf="server.isActive"> <mdb-icon fas icon="circle" class="green-text ml-3"></mdb-icon></span>
+              <span *ngIf="!server.isActive"> <mdb-icon fas icon="circle" class="red-text ml-3"></mdb-icon></span>
+            </div>
+          </mdb-card-body>
+        </mdb-card>
+        <span class="float-right mt-4 refresh-text"><mdb-icon fas icon="redo-alt"></mdb-icon>Refresh</span>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" mdbBtn color="info" class="waves-light" aria-label="Close" (click)="applicationResult.hide()" mdbWavesEffect>Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div mdbModal #serverList="mdbModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="serverListModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <mdb-card style="width: 7rem;" class="mx-auto">
+          <mdb-card-body>
+            <p>{{selectedApplication.applicationName}}<mdb-icon fas icon="circle" class="ml-1 green-text"></mdb-icon></p>
+            <p>Endpoint</p>
+            <div *ngFor="let server of selectedApplication.servers">
+             <span class="mr-1"><mdb-icon fas icon="arrow-right" class="grey-text" size="sm"></mdb-icon></span> {{server.serverName}}
+              <span *ngIf="server.isActive"> <mdb-icon fas icon="circle" class="green-text ml-3"></mdb-icon></span>
+              <span *ngIf="!server.isActive"> <mdb-icon fas icon="circle" class="red-text ml-3"></mdb-icon></span>
+            </div>
+          </mdb-card-body>
+        </mdb-card>
+        <span class="float-right mt-4 refresh-text"><mdb-icon fas icon="redo-alt"></mdb-icon>Refresh</span>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" mdbBtn color="info" class="waves-light" aria-label="Close" (click)="applicationResult.hide()" mdbWavesEffect>Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div mdbModal #addServer="mdbModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="addServerModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close pull-right" aria-label="Close" (click)="addServer.hide()">
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title w-100" id="myModalLabel">Create a Server</h4>
+      </div>
+      <div class="modal-body px-5">
+            <div class="row">
+            <p class="col-md-12">Enter Server Details</p>
+
+              <div class="col-md-3 mt-5">
+                Server Name
+              </div>
+              <div class="col-md-9">
+                <div class="md-form">
+                  <input mdbInput type="text" id="form1" class="form-control">
+                  <label for="form1" class="">Example label</label>
+                </div></div>
+                <div class="col-md-3  mt-5">
+                 Server IP
+                </div>
+                <div class="col-md-9">
+                  <div class="md-form">
+                    <input mdbInput type="text" id="form1" class="form-control">
+                    <label for="form1" class="">Example label</label>
+                  </div></div>
+                  <div class="col-md-3  mt-5">
+                  CPU
+                  </div>
+                  <div class="col-md-9">
+                    <div class="md-form">
+                      <input mdbInput type="text" id="form1" class="form-control">
+                      <label for="form1" class="">Example label</label>
+                    </div></div>
+                    <div class="col-md-3  mt-5">
+                   Storage
+                    </div>
+                    <div class="col-md-9">
+                      <div class="md-form">
+                        <input mdbInput type="text" id="form1" class="form-control">
+                        <label for="form1" class="">Example label</label>
+                      </div></div>
+
+            </div>
+        <span class="float-right mt-4 refresh-text"><mdb-icon fas icon="redo-alt"></mdb-icon>Refresh</span>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" mdbBtn color="transparent" class="waves-light" aria-label="Cancel" (click)="addServer.hide()" mdbWavesEffect>Cancel</button>
+
+        <button type="button" mdbBtn color="info" class="waves-light" aria-label="Create" (click)="addServer.hide()" mdbWavesEffect>Create</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+

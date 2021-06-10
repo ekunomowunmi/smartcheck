@@ -1,0 +1,15 @@
+.refresh-text{
+  color: #62BBE3;
+}
+
+a.server-length{
+  .show-modal{
+display: none;
+  }
+}
+
+a:hover.server-length{
+  .show-modal{
+    display: block;
+  }
+}

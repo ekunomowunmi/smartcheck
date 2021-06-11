@@ -1,85 +1,88 @@
 
-    <mdb-card class="mt-5">
-      <div class="view rgba-white-slight waves-light" mdbWavesEffect>
-        <a>
-          <div class="mask"></div>
-        </a>
-      </div>
-      <mdb-card-body>
-        <div class="row">
-          <div class="col-md-3 col-sm-3 col-lg-3">
-            <div class="md-form form-sm">
-              <mdb-icon fas icon="search" class="prefix"></mdb-icon>
-              <input mdbInput type="text" id="search" class="form-control">
-              <label for="search">Enter a search keyword</label>
+    <div class="p-5">
+      <mdb-card class="mt-5">
+        <div class="view rgba-white-slight waves-light" mdbWavesEffect>
+          <a>
+            <div class="mask"></div>
+          </a>
+        </div>
+        <mdb-card-body>
+          <div class="row p-3">
+            <div class="col-md-3 col-sm-3 col-lg-3">
+              <div class="md-form form-sm">
+                <mdb-icon fas icon="search" class="prefix"></mdb-icon>
+                <input mdbInput type="text" id="search" class="form-control">
+                <label for="search">Enter a search keyword</label>
+              </div>
             </div>
+
+
+            <div class="col-sm-2 col-md-2 col-lg-2 md-form">
+              <select class="browser-default custom-select">
+                <option selected>Active Status</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+                <option value="all">All</option>
+              </select>
+            </div>
+            <div class="col-sm-7 col-md-7 col-lg-7">
+            <button type="button" mdbBtn color="info" mdbWavesEffect class="float-right" (click)="addApplication.show()"> Add Application</button>
+            </div>
+
           </div>
+          <div class="table-responsive">
+            <table mdbTable #tableEl="mdbTable" class="z-depth-1 table">
+              <thead class=" w-100">
 
+                  <div class="d-flex justify-content-end p-4 mr-0">
+                    <img src="../../assets/svg/PDF.svg"  />
+                    <img src="../../assets/svg/xls.svg"/>
+                    <span class="ml-4">Showing 3 of {{elements.length}} entries</span>
+                  </div>
 
-          <div class="col-sm-2 col-md-2 col-lg-2 md-form">
-            <select class="browser-default custom-select">
-              <option selected>Active Status</option>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-              <option value="all">All</option>
-            </select>
-          </div>
-          <div class="col-sm-7 col-md-7 col-lg-7">
-          <button type="button" mdbBtn color="info" mdbWavesEffect class="float-right" (click)="addApplication.show()"> Add Application</button>
-          </div>
-
-        </div>
-        <div class="table-responsive">
-          <table mdbTable #tableEl="mdbTable" class="z-depth-1 table">
-            <thead class=" w-100">
-
-                <div class="d-flex justify-content-end p-4 mr-0">
-                  <img src="../../assets/svg/PDF.svg"  />
-                  <img src="../../assets/svg/xls.svg"/>
-                  <span class="ml-4">Showing 3 of {{elements.length}} entries</span>
-                </div>
-
-            </thead>
-            <thead>
-            <tr class="grey lighten-2 w-100">
-              <th *ngFor="let head of headElements; let i = index" scope="col">{{head}}
-              </th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let el of elements; let i = index">
-              <th *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex"
-                  scope="row">{{i+1}}</th>
-              <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex">
-                <mdb-icon fas icon="circle" [ngClass]="el.status == statusEnum.Healthy ? 'green-text' : 'red-text'"></mdb-icon> {{el.name}}</td>
-              <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex">{{el.type}}
-              </td>
-              <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex">{{el.description}}</td>
-              <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex">
-                {{el.port}}</td>
+              </thead>
+              <thead>
+              <tr class="grey lighten-2 w-100">
+                <th *ngFor="let head of headElements; let i = index" scope="col">{{head}}
+                </th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let el of elements; let i = index">
+                <th *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex"
+                    scope="row">{{i+1}}</th>
                 <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex">
-                  {{el.endpoint}}</td>
+                  <mdb-icon fas icon="circle" [ngClass]="el.status == statusEnum.Healthy ? 'green-text' : 'red-text'"></mdb-icon> {{el.name}}</td>
+                <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex">{{el.type}}
+                </td>
+                <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex">{{el.description}}</td>
+                <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex">
+                  {{el.port}}</td>
                   <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex">
-                    {{el.server}}</td>
-                <td> <button type="button" mdbBtn color="info" mdbWavesEffect  >Edit</button> </td>
+                    {{el.endpoint}}</td>
+                    <td *ngIf="i+1 >= mdbTablePagination.firstItemIndex && i < mdbTablePagination.lastItemIndex">
+                      {{el.server}}</td>
+                  <td> <button type="button" mdbBtn color="info" mdbWavesEffect  >Edit</button> </td>
 
-            </tr>
-            </tbody>
-            <tfoot class="grey lighten-5 w-100">
-            <tr>
-              <td colspan="6">
-                <mdb-table-pagination [tableEl]="tableEl" [searchDataSource]="elements"></mdb-table-pagination>
-              </td>
-            </tr>
-            </tfoot>
-          </table>
-        </div>
+              </tr>
+              </tbody>
+              <tfoot class="grey lighten-5 w-100">
+              <tr>
+                <td colspan="6">
+                  <mdb-table-pagination [tableEl]="tableEl" [searchDataSource]="elements"></mdb-table-pagination>
+                </td>
+              </tr>
+              </tfoot>
+            </table>
+          </div>
 
 
 
 
-      </mdb-card-body>
-    </mdb-card>
+        </mdb-card-body>
+      </mdb-card>
+    </div>
+
 
 
 
